@@ -8,6 +8,7 @@ import { Row } from 'react-bootstrap';
 import Col from 'react-bootstrap/esm/Col';
 import SignUp from "./views/SignUp";
 import Login from "./views/Login";
+import Home from "./components/Home";
 
 import UserType from "./types/auth";
 
@@ -34,7 +35,7 @@ export default function App() {
         <Row>
           <Col>
             <Routes>
-              <Route path='/'></Route>
+              <Route path='/' element={<Home/>}></Route>
               <Route path='/questions' element={<QuestionsView />}></Route>
               <Route path='/signup' element={<SignUp logUserIn={logUserIn} />}></Route>
               <Route path='/signin' element={<Login logUserIn={logUserIn} isLoggedIn={isLoggedIn} />}></Route>
