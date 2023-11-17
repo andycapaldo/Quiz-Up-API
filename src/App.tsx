@@ -1,36 +1,54 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import Header from './components/Header'
 import QuestionsView from './views/QuestionsView';
 import Container from 'react-bootstrap/Container';
-import { Alert, Row } from 'react-bootstrap';
+import { Row } from 'react-bootstrap';
 import Col from 'react-bootstrap/esm/Col';
 import SignUp from "./views/SignUp";
 import Login from "./views/Login";
-import Home from "./components/Home";
+import Home from "./views/Home";
 import AlertMessage from "./components/AlertMessage";
 
 import UserType from "./types/auth";
 import CategoryType from "./types/category";
+import { getUser } from "./lib/apiWrapper";
 
 
 export default function App() {
 
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('token') ? true: false);
   const [loggedInUser, setLoggedInUser] = useState<Partial<UserType>|null>(null)
   const [message, setMessage] = useState<string|null>(null);
   const [category, setCategory] = useState<CategoryType|null>(null);
 
+  useEffect( () => {
+    async function getLoggedInUser(){
+      if (isLoggedIn){
+        const token = localStorage.getItem('token') as string
+        const response = await getUser(token);
+        if (response.data){
+          setLoggedInUser(response.data)
+        } else {
+          console.error(response.error)
+        }
+      }
+    }
+
+    getLoggedInUser();
+  }, [isLoggedIn])
+
   const logUserIn = (user:Partial<UserType>):void => {
     setIsLoggedIn(true);
     setLoggedInUser(user);
-    flashMessage(`${user.firstName} has been logged in`, 'success');
+    flashMessage(`You have been logged in`, 'success');
   }
 
   const logUserOut = ():void => {
     setIsLoggedIn(false);
     setLoggedInUser(null);
+    localStorage.removeItem('token');
     flashMessage('You have logged out', 'light');
   }
 
@@ -47,10 +65,10 @@ export default function App() {
           <Col>
           {message && category && <AlertMessage message={message} category={category} flashMessage={flashMessage} />}
             <Routes>
-              <Route path='/' element={<Home/>}></Route>
+              <Route path='/' element={<Home loggedInUser={loggedInUser}/>}></Route>
               <Route path='/questions' element={<QuestionsView />}></Route>
-              <Route path='/signup' element={<SignUp logUserIn={logUserIn} />}></Route>
-              <Route path='/signin' element={<Login logUserIn={logUserIn} isLoggedIn={isLoggedIn} />}></Route>
+              <Route path='/signup' element={<SignUp logUserIn={logUserIn} flashMessage={flashMessage} />}></Route>
+              <Route path='/signin' element={<Login logUserIn={logUserIn} isLoggedIn={isLoggedIn} flashMessage={flashMessage} />}></Route>
             </Routes>
           </Col>
         </Row>

@@ -1,7 +1,7 @@
 type UserType = {
-    firstName: string,
-    lastName: string,
-    email: string,
+    email: string
+    first_name: string,
+    last_name: string,
     password: string
 }
 
