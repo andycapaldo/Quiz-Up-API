@@ -49,7 +49,7 @@ async function createNewUser(newUserData:Partial<UserType>): Promise<APIResponse
     return {data, error}
 }
 
-async function login(email: string, password: string): Promise<APIResponse<{token:string}>> {
+async function login(email: string, password: string): Promise<APIResponse<UserType>> {
     let data;
     let error;
     try{
@@ -65,11 +65,11 @@ async function login(email: string, password: string): Promise<APIResponse<{toke
     return {data, error}
 }
 
-async function getUser(token:string): Promise<APIResponse<UserType>> {
+async function editProfile(token:string, editedUserData:UserType): Promise<APIResponse<{success:string}>> {
     let data;
     let error;
     try{
-        const response = await apiClientTokenAuth(token).get(loginEndpoint);
+        const response = await apiClientTokenAuth(token).put(userEndpoint + '/' + editedUserData);
         data = response.data
     } catch(err) {
         if (axios.isAxiosError(err)){
@@ -85,5 +85,5 @@ async function getUser(token:string): Promise<APIResponse<UserType>> {
 export {
     createNewUser,
     login,
-    getUser
+    editProfile
 }

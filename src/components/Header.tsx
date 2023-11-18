@@ -19,8 +19,9 @@ export default function Header({ isLoggedIn, handleLogOut }: HeaderProps) {
                 <Nav.Link as={Link} to='/'>Home</Nav.Link>
                 { isLoggedIn? (
                     <>
-                        <Nav.Link as={Link} to='/' onClick={handleLogOut}>Logout</Nav.Link>
+                        <Nav.Link as={Link} to='/profile'>Profile</Nav.Link>
                         <Nav.Link as={Link} to='/questions'>Questions</Nav.Link>
+                        <Nav.Link as={Link} to='/' onClick={handleLogOut}>Logout</Nav.Link>
                     </>
                 ) : (
                 <>

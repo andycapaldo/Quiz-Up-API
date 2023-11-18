@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 
 import Header from './components/Header'
 import QuestionsView from './views/QuestionsView';
+import Profile from "./views/Profile";
 import Container from 'react-bootstrap/Container';
 import { Row } from 'react-bootstrap';
 import Col from 'react-bootstrap/esm/Col';
@@ -13,7 +14,7 @@ import AlertMessage from "./components/AlertMessage";
 
 import UserType from "./types/auth";
 import CategoryType from "./types/category";
-import { getUser } from "./lib/apiWrapper";
+
 
 
 export default function App() {
@@ -26,13 +27,8 @@ export default function App() {
   useEffect( () => {
     async function getLoggedInUser(){
       if (isLoggedIn){
-        const token = localStorage.getItem('token') as string
-        const response = await getUser(token);
-        if (response.data){
-          setLoggedInUser(response.data)
-        } else {
-          console.error(response.error)
-        }
+          const user = JSON.parse(localStorage.getItem('user')|| '')
+          setLoggedInUser(user)
       }
     }
 
@@ -42,12 +38,13 @@ export default function App() {
   const logUserIn = (user:Partial<UserType>):void => {
     setIsLoggedIn(true);
     setLoggedInUser(user);
-    flashMessage(`You have been logged in`, 'success');
+    flashMessage(`Welcome ${user.first_name}!`, 'success');
   }
 
   const logUserOut = ():void => {
     setIsLoggedIn(false);
     setLoggedInUser(null);
+    localStorage.removeItem('user');
     localStorage.removeItem('token');
     flashMessage('You have logged out', 'light');
   }
@@ -69,6 +66,7 @@ export default function App() {
               <Route path='/questions' element={<QuestionsView />}></Route>
               <Route path='/signup' element={<SignUp logUserIn={logUserIn} flashMessage={flashMessage} />}></Route>
               <Route path='/signin' element={<Login logUserIn={logUserIn} isLoggedIn={isLoggedIn} flashMessage={flashMessage} />}></Route>
+              <Route path='/profile' element={<Profile loggedInUser={loggedInUser} />}></Route>
             </Routes>
           </Col>
         </Row>

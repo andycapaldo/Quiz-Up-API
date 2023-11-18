@@ -38,7 +38,8 @@ export default function Login({ logUserIn, isLoggedIn, flashMessage}: LoginProps
             flashMessage(response.error, 'warning')
         } else {
             localStorage.setItem('token', response.data?.token as string)
-            logUserIn(userFormData);
+            localStorage.setItem('user', JSON.stringify(response.data!))
+            logUserIn(response.data!);
             navigate('/')
         }
     }

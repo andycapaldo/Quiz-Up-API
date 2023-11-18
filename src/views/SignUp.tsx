@@ -36,9 +36,10 @@ export default function SignUp({ logUserIn, flashMessage }: SignUpProps) {
         if (response.error){
             flashMessage(response.error, 'danger')
         } else {
-            const newUser = response.data!
             const newUserTokenResponse = await login(userFormData.email!, userFormData.password!)
+            const newUser = newUserTokenResponse.data!
             localStorage.setItem('token', newUserTokenResponse.data?.token!)
+            localStorage.setItem('user', JSON.stringify(newUserTokenResponse.data!))
             logUserIn(newUser);
             navigate('/');
         }
