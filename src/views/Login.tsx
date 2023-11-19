@@ -36,6 +36,7 @@ export default function Login({ logUserIn, isLoggedIn, flashMessage}: LoginProps
         const response = await login(userFormData.email!, userFormData.password!)
         if (response.error){
             flashMessage(response.error, 'warning')
+            navigate('/login')
         } else {
             localStorage.setItem('token', response.data?.token as string)
             localStorage.setItem('user', JSON.stringify(response.data!))

@@ -25,6 +25,7 @@ export default function App() {
   const [message, setMessage] = useState<string|null>(null);
   const [category, setCategory] = useState<CategoryType|null>(null);
 
+
   useEffect( () => {
     async function getLoggedInUser(){
       if (isLoggedIn){
@@ -41,9 +42,13 @@ export default function App() {
   }, [isLoggedIn])
 
   const logUserIn = (user:Partial<UserType>):void => {
-    setIsLoggedIn(true);
-    setLoggedInUser(user);
-    flashMessage(`Welcome ${user.first_name}!`, 'success');
+    if (localStorage.getItem('token') === "undefined") {
+      flashMessage(`Invalid email or password`, 'danger')
+    } else {
+      setIsLoggedIn(true);
+      setLoggedInUser(user);
+      flashMessage(`Welcome ${user.first_name}!`, 'success');
+    }
   }
 
   const logUserOut = ():void => {
