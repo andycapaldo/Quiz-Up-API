@@ -1,12 +1,14 @@
 import axios from 'axios';
 import APIResponse from '../types/api';
 import UserType from '../types/auth';
+import QuestionType from '../types/question';
 
 
 
-const base: string = 'https://cae-bookstore.herokuapp.com/'
+const base: string = 'https://cae-bookstore.herokuapp.com'
 const userEndpoint: string = '/user'
 const loginEndpoint: string = '/login'
+const questionEndpoint: string = '/question'
 
 
 const apiClientNoAuth = () => axios.create(
@@ -32,6 +34,23 @@ const apiClientTokenAuth = (token:string) => axios.create(
         }
     }
 )
+
+async function getAllQuestions(): Promise<APIResponse<QuestionType[]>> {
+    let data;
+    let error;
+    try {
+        const response = await apiClientNoAuth().get(questionEndpoint + '/all');
+        data = response.data
+    } catch(err) {
+        if (axios.isAxiosError(err)){
+            error = err.message
+        } else {
+            error = 'Something went wrong'
+        }
+    }
+    return {data, error}
+    
+}
 
 async function createNewUser(newUserData:Partial<UserType>): Promise<APIResponse<UserType>> {
     let data;
@@ -97,10 +116,28 @@ async function deleteProfile(token:string): Promise<APIResponse<{success:string}
     return {data, error}
 }
 
+async function createQuestion(token:string, questionFormData: Partial<QuestionType>): Promise<APIResponse<QuestionType>> {
+    let data;
+    let error;
+    try{
+        const response = await apiClientTokenAuth(token).post(questionEndpoint, questionFormData)
+        data = response.data;
+    } catch(err) {
+        if (axios.isAxiosError(err)){
+            error = err.response?.data.error
+        } else {
+            error = 'Something went wrong'
+        }
+    }
+    return {data, error}
+}
+
 
 export {
+    getAllQuestions,
     createNewUser,
     login,
     editProfile,
-    deleteProfile
+    deleteProfile,
+    createQuestion
 }

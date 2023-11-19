@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
-import Card from 'react-bootstrap/Card';
 import { Modal } from 'react-bootstrap';
 import { deleteProfile } from '../lib/apiWrapper';
 import UserType from '../types/auth';

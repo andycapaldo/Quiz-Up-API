@@ -64,7 +64,7 @@ export default function App() {
           {message && category && <AlertMessage message={message} category={category} flashMessage={flashMessage} />}
             <Routes>
               <Route path='/' element={<Home loggedInUser={loggedInUser}/>}></Route>
-              <Route path='/questions' element={<QuestionsView />}></Route>
+              <Route path='/questions' element={<QuestionsView isLoggedIn={isLoggedIn} flashMessage={flashMessage} />}></Route>
               <Route path='/signup' element={<SignUp logUserIn={logUserIn} flashMessage={flashMessage} />}></Route>
               <Route path='/signin' element={<Login logUserIn={logUserIn} isLoggedIn={isLoggedIn} flashMessage={flashMessage} />}></Route>
               <Route path='/profile' element={<Profile loggedInUser={loggedInUser} flashMessage={flashMessage} />}></Route>
