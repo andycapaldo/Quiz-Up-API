@@ -18,18 +18,18 @@ type QuestionProps = {
 export default function QuestionForm({ flashMessage, setDisplay, setForm, toggle }: QuestionProps) {
     const [questionFormData, setQuestionFormData] = useState<Partial<QuestionType>>({question:'', answer:''})
 
-    const handleInputChange = (e:React.ChangeEvent<HTMLInputElement>) => {
+    const handleInputChange = (e:React.ChangeEvent<HTMLInputElement>): void => {
         setQuestionFormData({...questionFormData, [e.target.name]: e.target.value})
     }
 
-    const handleFormSubmit = async (e:React.FormEvent) => {
+    const handleFormSubmit = async (e:React.FormEvent): Promise<void> => {
         e.preventDefault();
         const token = localStorage.getItem('token') || ''
         const response = await createQuestion(token, questionFormData)
         if (response.error){
             flashMessage(response.error, 'danger');
         } else {
-            flashMessage(`${response.data?.question} has been created`, 'info')
+            flashMessage(`${response.data?.id} has been created`, 'info')
             setDisplay(false)
             setForm(!toggle);
         }
@@ -39,10 +39,10 @@ export default function QuestionForm({ flashMessage, setDisplay, setForm, toggle
     <Card>
     <Card.Body>
         <Form onSubmit={handleFormSubmit}>
-            <Form.Label htmlFor='title'>Question</Form.Label>
-            <Form.Control name='title' placeholder='Enter Your Question' onChange={handleInputChange} value={questionFormData.question} />
-            <Form.Label htmlFor='body'>Answer</Form.Label>
-            <Form.Control name='body' placeholder='Enter Answer' onChange={handleInputChange} value={questionFormData.answer} />
+            <Form.Label htmlFor='question'>Question</Form.Label>
+            <Form.Control name='question' placeholder='Enter Your Question' onChange={handleInputChange} value={questionFormData.question} />
+            <Form.Label htmlFor='answer'>Answer</Form.Label>
+            <Form.Control name='answer' placeholder='Enter Answer' onChange={handleInputChange} value={questionFormData.answer} />
             <Button variant='primary' className='w-100 mt-3' type='submit'>Create Question</Button>
         </Form>
     </Card.Body>

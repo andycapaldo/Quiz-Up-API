@@ -5,13 +5,17 @@ import { Button } from 'react-bootstrap';
 
 
 type QuestionProps = {  
-    question: QuestionType
+    question?: Partial<QuestionType>
 }
 
 
-export default function Question({ question }: QuestionProps) {
+export default function QuestionComponent({ question }: QuestionProps) {
 
   const [showAnswer, setShowAnswer] = useState(false);
+
+  if(!question){
+    return <p>No question available</p>;
+  }
 
   return (
     <>

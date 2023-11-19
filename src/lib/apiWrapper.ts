@@ -5,7 +5,7 @@ import QuestionType from '../types/question';
 
 
 
-const base: string = 'https://cae-bookstore.herokuapp.com'
+const base: string = 'https://cae-bookstore.herokuapp.com/'
 const userEndpoint: string = '/user'
 const loginEndpoint: string = '/login'
 const questionEndpoint: string = '/question'
@@ -132,6 +132,22 @@ async function createQuestion(token:string, questionFormData: Partial<QuestionTy
     return {data, error}
 }
 
+async function getMyQuestions(token:string): Promise<APIResponse<QuestionType[]>> {
+    let data;
+    let error;
+    try{
+        const response = await apiClientTokenAuth(token).get(questionEndpoint)
+        data = response.data;
+    } catch(err) {
+        if (axios.isAxiosError(err)){
+            error = err.response?.data.error
+        } else {
+            error = 'Something went wrong'
+        }
+    }
+    return {data, error}
+}
+
 
 export {
     getAllQuestions,
@@ -139,5 +155,6 @@ export {
     login,
     editProfile,
     deleteProfile,
-    createQuestion
+    createQuestion,
+    getMyQuestions
 }

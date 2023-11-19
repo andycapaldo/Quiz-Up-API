@@ -29,7 +29,11 @@ export default function App() {
     async function getLoggedInUser(){
       if (isLoggedIn){
           const user = JSON.parse(localStorage.getItem('user')|| '')
-          setLoggedInUser(user)
+          if(user){
+            setLoggedInUser(user)
+          } else {
+            logUserOut()
+          }
       }
     }
 
@@ -72,6 +76,7 @@ export default function App() {
           </Col>
         </Row>
       </Container>
+      
     </BrowserRouter>
     </>
   )

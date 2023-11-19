@@ -37,14 +37,14 @@ export default function ProfileDeleteForm({ currentUser, flashMessage, handleClo
             <Button variant='danger' onClick={handleDeleteClick}>
                 Delete Profile
             </Button>
-            <Modal show={show} onHide={handleClose}>
-                <Modal.Header closeButton>
+            <Modal show={show} onHide={handleClose} className='deleteModal'>
+                <Modal.Header closeButton className='deleteModalText'>
                     <Modal.Title>Delete {currentUser?.first_name}'s Profile?</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>
+                <Modal.Body className='deleteModalText'>
                     Are you sure you want to delete {currentUser?.first_name}'s Profile? This action cannot be undone!
                 </Modal.Body>
-                <Modal.Footer>
+                <Modal.Footer className='deleteModalText'>
                     <Button variant='danger' className='mt-3 w-50' onClick={handleConfirmDelete}>
                         Delete Profile
                     </Button>

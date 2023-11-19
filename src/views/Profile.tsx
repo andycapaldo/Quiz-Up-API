@@ -1,10 +1,13 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import { Card } from 'react-bootstrap';
 import UserType from '../types/auth';
+import QuestionType from '../types/question';
 import CategoryType from '../types/category';
 import ProfileEditForm from '../components/ProfileEditForm';
 import ProfileDeleteForm from '../components/ProfileDeleteForm';
+import QuestionComponent from '../components/QuestionComponent';
+import { getMyQuestions } from '../lib/apiWrapper';
 
 type ProfileProps = {
     loggedInUser: Partial<UserType> | null;
@@ -14,6 +17,21 @@ type ProfileProps = {
 export default function Profile({ loggedInUser, flashMessage }: ProfileProps) {
     const [showEditForm, setShowEditForm] = useState(false);
     const [showDeleteForm, setShowDeleteForm] = useState(false);
+    const [userQuestions, setUserQuestions] = useState<Partial<QuestionType[]>>([]);
+
+    useEffect( () => {
+        async function fetchData(){
+            const token = localStorage.getItem('token') || '';
+            const response = await getMyQuestions(token);
+            if (response.data) {
+                setUserQuestions(response.data);
+            } else if (response.error){
+                console.warn(response.error)
+            }
+        };
+
+        fetchData()
+    }, [loggedInUser])
 
     const handleEditClick = () => {
         setShowEditForm(true);
@@ -31,7 +49,7 @@ export default function Profile({ loggedInUser, flashMessage }: ProfileProps) {
         setShowDeleteForm(false);
     };
 
-
+    console.log(userQuestions[0]?.answer)
     return (
         <>
             {loggedInUser && <h1>{loggedInUser.first_name}'s Profile</h1>}
@@ -50,6 +68,14 @@ export default function Profile({ loggedInUser, flashMessage }: ProfileProps) {
                 Delete Profile
             </Button>
 
+            {userQuestions && userQuestions.length > 0 && (
+                <>
+                    <h1>{loggedInUser?.first_name}'s Questions</h1>
+                    <Card>
+                        <Card.Header>Question # {userQuestions[0]?.id}</Card.Header>
+                    </Card>
+                </>
+            )}
             {showEditForm && (
                 <ProfileEditForm
                     currentUser={loggedInUser}
