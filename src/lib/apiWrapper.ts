@@ -65,12 +65,28 @@ async function login(email: string, password: string): Promise<APIResponse<UserT
     return {data, error}
 }
 
-async function editProfile(token:string, editedUserData:UserType): Promise<APIResponse<{success:string}>> {
+async function editProfile(token:string, editedUserData:{ email: string }): Promise<APIResponse<{success:string}>> {
     let data;
     let error;
     try{
-        const response = await apiClientTokenAuth(token).put(userEndpoint + '/' + editedUserData);
+        const response = await apiClientTokenAuth(token).put(userEndpoint + '/', editedUserData);
         data = response.data
+    } catch(err) {
+        if (axios.isAxiosError(err)){
+            error = err.response?.data.error
+        } else {
+            error = 'Something went wrong'
+        }
+    }
+    return {data, error}
+}
+
+async function deleteProfile(token:string): Promise<APIResponse<{success:string}>> {
+    let data;
+    let error;
+    try{
+        const response = await apiClientTokenAuth(token).delete(userEndpoint);
+        data = response.data;
     } catch(err) {
         if (axios.isAxiosError(err)){
             error = err.response?.data.error
@@ -85,5 +101,6 @@ async function editProfile(token:string, editedUserData:UserType): Promise<APIRe
 export {
     createNewUser,
     login,
-    editProfile
+    editProfile,
+    deleteProfile
 }

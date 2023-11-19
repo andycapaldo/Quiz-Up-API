@@ -14,6 +14,7 @@ import AlertMessage from "./components/AlertMessage";
 
 import UserType from "./types/auth";
 import CategoryType from "./types/category";
+import ProfileForm from "./components/ProfileEditForm";
 
 
 
@@ -66,7 +67,7 @@ export default function App() {
               <Route path='/questions' element={<QuestionsView />}></Route>
               <Route path='/signup' element={<SignUp logUserIn={logUserIn} flashMessage={flashMessage} />}></Route>
               <Route path='/signin' element={<Login logUserIn={logUserIn} isLoggedIn={isLoggedIn} flashMessage={flashMessage} />}></Route>
-              <Route path='/profile' element={<Profile loggedInUser={loggedInUser} />}></Route>
+              <Route path='/profile' element={<Profile loggedInUser={loggedInUser} flashMessage={flashMessage} />}></Route>
             </Routes>
           </Col>
         </Row>
