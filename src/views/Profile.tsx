@@ -59,7 +59,7 @@ export default function Profile({ loggedInUser, flashMessage }: ProfileProps) {
                 <Card.Text>First Name: {loggedInUser?.first_name}</Card.Text>
                 <Card.Text>Last Name: {loggedInUser?.last_name}</Card.Text>
                 <Card.Text>Email: {loggedInUser?.email}</Card.Text>
-                <Card.Text>Questions: 0</Card.Text>
+                <Card.Text>Questions: {questionsArray ? questionsArray.length : 0}</Card.Text>
             </Card.Body>
         </Card>
             <Button variant='success' onClick={handleEditClick}>
