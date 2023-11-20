@@ -2,14 +2,16 @@ import { useState } from 'react';
 import Card from 'react-bootstrap/Card';
 import QuestionType from '../types/question';
 import { Button } from 'react-bootstrap';
+import UserType from '../types/auth';
 
 
 type QuestionProps = {  
-    question?: Partial<QuestionType>
+    question: Partial<QuestionType>,
+    currentUser: UserType|null
 }
 
 
-export default function QuestionComponent({ question }: QuestionProps) {
+export default function QuestionComponent({ question, currentUser }: QuestionProps) {
 
   const [showAnswer, setShowAnswer] = useState(false);
 
@@ -30,6 +32,11 @@ export default function QuestionComponent({ question }: QuestionProps) {
                     <Button  variant={showAnswer ? 'danger' : 'primary'}onClick={() => setShowAnswer(!showAnswer)}>{showAnswer ? 'Hide Answer' : 'Show Answer'}</Button>
             </Card.Body>
     </Card>
+    {question.author === `${currentUser?.first_name} ${currentUser?.last_name}_0${currentUser?.user_id}` &&
+    <>
+    <Button variant='success'>Edit Question</Button>
+    <Button variant='danger'>Delete Question</Button>
+    </>}
     </>
   )
 }

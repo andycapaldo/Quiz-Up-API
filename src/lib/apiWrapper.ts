@@ -88,7 +88,7 @@ async function editProfile(token:string, editedUserData:{ email: string }): Prom
     let data;
     let error;
     try{
-        const response = await apiClientTokenAuth(token).put(userEndpoint + '/', editedUserData);
+        const response = await apiClientTokenAuth(token).put(userEndpoint, editedUserData);
         data = response.data
     } catch(err) {
         if (axios.isAxiosError(err)){

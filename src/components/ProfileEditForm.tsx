@@ -6,6 +6,7 @@ import { editProfile } from '../lib/apiWrapper';
 import UserType from '../types/auth';
 import CategoryType from '../types/category';
 
+
 type ProfileEditFormProps = {
     currentUser: Partial<UserType> | null;
     flashMessage: (message: string, category: CategoryType) => void;
@@ -33,15 +34,15 @@ export default function ProfileEditForm({ currentUser, flashMessage, handleClose
 
     return (
         <>
-            <h1 className='text-center'>Edit {profileToEdit?.first_name}'s Profile</h1>
+            <h1 className='text-center'>Edit {profileToEdit?.last_name}'s Profile</h1>
             {profileToEdit && (
                 <Card>
                     <Card.Body>
                         <Form onSubmit={handleFormSubmit}>
                             <Form.Label>Edit Profile</Form.Label>
                             <Form.Control
-                                name='email' // Update with the correct field names
-                                value={profileToEdit.email} // Update with the correct field values
+                                name='email'
+                                value={profileToEdit.email}
                                 onChange={handleInputChange}
                             />
                             <Button variant='success' className='mt-3 w-50' type='submit'>

@@ -3,7 +3,8 @@ type UserType = {
     first_name: string,
     last_name: string,
     password: string,
-    token?: string
+    token?: string,
+    user_id: number
 }
 
 export default UserType

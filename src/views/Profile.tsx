@@ -10,14 +10,14 @@ import QuestionComponent from '../components/QuestionComponent';
 import { getMyQuestions } from '../lib/apiWrapper';
 
 type ProfileProps = {
-    loggedInUser: Partial<UserType> | null;
+    loggedInUser: UserType | null;
     flashMessage: (message: string, category: CategoryType) => void;
 };
 
 export default function Profile({ loggedInUser, flashMessage }: ProfileProps) {
     const [showEditForm, setShowEditForm] = useState(false);
     const [showDeleteForm, setShowDeleteForm] = useState(false);
-    const [userQuestions, setUserQuestions] = useState<Partial<QuestionType[]>>([]);
+    const [userQuestions, setUserQuestions] = useState<QuestionType[]>([]);
 
     useEffect( () => {
         async function fetchData(){
@@ -49,7 +49,8 @@ export default function Profile({ loggedInUser, flashMessage }: ProfileProps) {
         setShowDeleteForm(false);
     };
 
-    console.log(userQuestions[0]?.answer)
+
+    const questionsArray = userQuestions['questions'];
     return (
         <>
             {loggedInUser && <h1>{loggedInUser.first_name}'s Profile</h1>}
@@ -67,15 +68,6 @@ export default function Profile({ loggedInUser, flashMessage }: ProfileProps) {
             <Button variant='danger' onClick={handleDeleteClick}>
                 Delete Profile
             </Button>
-
-            {userQuestions && userQuestions.length > 0 && (
-                <>
-                    <h1>{loggedInUser?.first_name}'s Questions</h1>
-                    <Card>
-                        <Card.Header>Question # {userQuestions[0]?.id}</Card.Header>
-                    </Card>
-                </>
-            )}
             {showEditForm && (
                 <ProfileEditForm
                     currentUser={loggedInUser}
@@ -83,13 +75,21 @@ export default function Profile({ loggedInUser, flashMessage }: ProfileProps) {
                     handleCloseForm={handleCloseEditForm}
                 />
             )}
-
             {showDeleteForm && (
                 <ProfileDeleteForm
                     currentUser={loggedInUser}
                     flashMessage={flashMessage}
                     handleCloseForm={handleCloseDeleteForm}
                 />
+            )}
+
+            {questionsArray && questionsArray.length > 0 && (
+                <>
+                    <h1>{loggedInUser?.first_name}'s Questions</h1>
+                    {questionsArray.map((question:QuestionType) => (
+                    <QuestionComponent key={question.id} question={question} currentUser={loggedInUser}/>
+                ))}
+                </>
             )}
         </>
     );

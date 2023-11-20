@@ -4,6 +4,7 @@ import { Modal } from 'react-bootstrap';
 import { deleteProfile } from '../lib/apiWrapper';
 import UserType from '../types/auth';
 import CategoryType from '../types/category';
+import { useNavigate } from 'react-router-dom';
 
 type ProfileDeleteFormProps = {
     currentUser: Partial<UserType> | null;
@@ -18,6 +19,8 @@ export default function ProfileDeleteForm({ currentUser, flashMessage, handleClo
     const handleDeleteClick = () => setShow(true);
     const handleClose = () => setShow(false);
 
+    const navigate = useNavigate();
+
 
     const handleConfirmDelete = async () => {
         if (!currentUser) return;
@@ -29,13 +32,16 @@ export default function ProfileDeleteForm({ currentUser, flashMessage, handleClo
         } else {
             flashMessage(response.data?.success!, 'primary');
             handleCloseForm();
+            localStorage.removeItem('user');
+            localStorage.removeItem('token');
+            navigate('/');
         }
     };
 
     return (
         <>
             <Button variant='danger' onClick={handleDeleteClick}>
-                Delete Profile
+                Confirm Delete
             </Button>
             <Modal show={show} onHide={handleClose} className='deleteModal'>
                 <Modal.Header closeButton className='deleteModalText'>

@@ -14,14 +14,14 @@ import AlertMessage from "./components/AlertMessage";
 
 import UserType from "./types/auth";
 import CategoryType from "./types/category";
-import ProfileForm from "./components/ProfileEditForm";
+
 
 
 
 export default function App() {
 
   const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('token') ? true: false);
-  const [loggedInUser, setLoggedInUser] = useState<Partial<UserType>|null>(null)
+  const [loggedInUser, setLoggedInUser] = useState<UserType|null>(null)
   const [message, setMessage] = useState<string|null>(null);
   const [category, setCategory] = useState<CategoryType|null>(null);
 
