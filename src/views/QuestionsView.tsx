@@ -9,7 +9,7 @@ import QuestionComponent from "../components/QuestionComponent";
 type QuestionsViewProps = {
     isLoggedIn: boolean,
     flashMessage: (message:string, category: CategoryType) => void,
-    currentUser: UserType|null
+    currentUser: Partial<UserType>|null
 }
 
 

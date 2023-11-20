@@ -148,6 +148,22 @@ async function getMyQuestions(token:string): Promise<APIResponse<QuestionType[]>
     return {data, error}
 }
 
+async function deleteQuestion(token:string, questionId: number): Promise<APIResponse<QuestionType>> {
+    let data;
+    let error;
+    try{
+        const response = await apiClientTokenAuth(token).delete(questionEndpoint + '/' + questionId);
+        data = response.data;
+    } catch(err){
+        if (axios.isAxiosError(err)){
+            error = err.response?.data.error 
+        } else {
+            error = 'Something went wrong'
+        }
+    }
+    return {data, error}
+}
+
 
 export {
     getAllQuestions,
@@ -156,5 +172,6 @@ export {
     editProfile,
     deleteProfile,
     createQuestion,
-    getMyQuestions
+    getMyQuestions,
+    deleteQuestion
 }

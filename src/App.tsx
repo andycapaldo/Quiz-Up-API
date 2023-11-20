@@ -21,7 +21,7 @@ import CategoryType from "./types/category";
 export default function App() {
 
   const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('token') ? true: false);
-  const [loggedInUser, setLoggedInUser] = useState<UserType|null>(null)
+  const [loggedInUser, setLoggedInUser] = useState<Partial<UserType>|null>(null)
   const [message, setMessage] = useState<string|null>(null);
   const [category, setCategory] = useState<CategoryType|null>(null);
 
@@ -73,7 +73,7 @@ export default function App() {
           {message && category && <AlertMessage message={message} category={category} flashMessage={flashMessage} />}
             <Routes>
               <Route path='/' element={<Home loggedInUser={loggedInUser}/>}></Route>
-              <Route path='/questions' element={<QuestionsView isLoggedIn={isLoggedIn} flashMessage={flashMessage} />}></Route>
+              <Route path='/questions' element={<QuestionsView isLoggedIn={isLoggedIn} flashMessage={flashMessage} currentUser={loggedInUser} />}></Route>
               <Route path='/signup' element={<SignUp logUserIn={logUserIn} flashMessage={flashMessage} />}></Route>
               <Route path='/signin' element={<Login logUserIn={logUserIn} isLoggedIn={isLoggedIn} flashMessage={flashMessage} />}></Route>
               <Route path='/profile' element={<Profile loggedInUser={loggedInUser} flashMessage={flashMessage} />}></Route>

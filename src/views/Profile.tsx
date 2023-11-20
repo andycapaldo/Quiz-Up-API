@@ -10,7 +10,7 @@ import QuestionComponent from '../components/QuestionComponent';
 import { getMyQuestions } from '../lib/apiWrapper';
 
 type ProfileProps = {
-    loggedInUser: UserType | null;
+    loggedInUser: Partial<UserType> | null;
     flashMessage: (message: string, category: CategoryType) => void;
 };
 
