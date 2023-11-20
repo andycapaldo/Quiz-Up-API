@@ -87,7 +87,7 @@ export default function Profile({ loggedInUser, flashMessage }: ProfileProps) {
                 <>
                     <h1>{loggedInUser?.first_name}'s Questions</h1>
                     {questionsArray.map((question:QuestionType) => (
-                    <QuestionComponent key={question.id} question={question} currentUser={loggedInUser}/>
+                    <QuestionComponent flashMessage={flashMessage} key={question.id} question={question} currentUser={loggedInUser}/>
                 ))}
                 </>
             )}

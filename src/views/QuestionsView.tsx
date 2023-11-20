@@ -33,7 +33,7 @@ return (
         {displayForm && 
         <QuestionForm flashMessage={flashMessage} setDisplay={setDisplayForm} setForm={setFormSubmitted} toggle={formSubmitted} />}
     {questions.map((question) => (
-        <QuestionComponent key={question.id} question={question} currentUser={currentUser}/>
+        <QuestionComponent flashMessage={flashMessage} key={question.id} question={question} currentUser={currentUser}/>
     ))}
     </>
     )

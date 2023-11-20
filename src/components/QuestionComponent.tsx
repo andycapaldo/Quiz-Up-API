@@ -4,17 +4,22 @@ import QuestionType from '../types/question';
 import { Button } from 'react-bootstrap';
 import { Modal } from 'react-bootstrap';
 import UserType from '../types/auth';
-import { deleteQuestion } from '../lib/apiWrapper';
+import CategoryType from '../types/category';
+import { deleteQuestion, editQuestion } from '../lib/apiWrapper';
+import Form from 'react-bootstrap/Form';
 
 
 type QuestionProps = {  
-    question: Partial<QuestionType>,
-    currentUser: Partial<UserType>|null
+    question: Partial<QuestionType>|null,
+    currentUser: Partial<UserType>|null,
+    flashMessage: (message: string, category: CategoryType) => void;
 }
 
 
-export default function QuestionComponent({ question, currentUser }: QuestionProps) {
+export default function QuestionComponent({ question, currentUser, flashMessage }: QuestionProps) {
   const [showDeleteForm, setShowDeleteForm] = useState(false);
+  const [showEditForm, setShowEditForm] = useState(false);
+  const [questionToEdit, setQuestionToEdit] = useState<Partial<QuestionType>|null>({answer: question?.answer});
   const [showAnswer, setShowAnswer] = useState(false);
 
   const handleDeleteClick = () => {
@@ -24,6 +29,19 @@ export default function QuestionComponent({ question, currentUser }: QuestionPro
   const handleCloseDeleteForm = () => {
     setShowDeleteForm(false);
   };
+
+  const handleEditClick = () => {
+    setShowEditForm(true);
+  };
+  
+  const handleCloseEditForm = () => {
+    setShowEditForm(false);
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    setQuestionToEdit({...questionToEdit!, [e.target.name]: e.target.value});
+  };
+
 
   const handleConfirmDelete = async () => {
     if (!currentUser || !question || question.id === undefined) return;
@@ -40,7 +58,21 @@ export default function QuestionComponent({ question, currentUser }: QuestionPro
       handleCloseDeleteForm();
     }
 
-};
+  };
+
+  const handleFormSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const token = localStorage.getItem('token') || '';
+    const questionId = question!.id as number;
+
+    const response = await editQuestion(token, questionId, questionToEdit as QuestionType);
+    if(response.error) {
+      console.warn(response.error)
+    } else {
+      flashMessage(`Question # ${question?.id} has been edited!`, 'success')
+      handleCloseEditForm();
+    }
+  }
 
   if(!question){
     return <p>No question available</p>;
@@ -61,7 +93,7 @@ export default function QuestionComponent({ question, currentUser }: QuestionPro
     </Card>
     {question.author === `${currentUser?.first_name} ${currentUser?.last_name}_0${currentUser?.user_id}` &&
     <>
-    <Button variant='success'>Edit Question</Button>
+    <Button variant='success' onClick={handleEditClick}>Edit Question</Button>
     <Button variant='danger' onClick={handleDeleteClick}>Delete Question</Button>
     </>
     }
@@ -80,6 +112,26 @@ export default function QuestionComponent({ question, currentUser }: QuestionPro
                     <Button variant='warning' className='mt-3 w-50' onClick={handleCloseDeleteForm}>
                         Cancel
                     </Button>
+                </Modal.Footer>
+            </Modal>
+        }
+      {showEditForm && 
+                <Modal show={showEditForm} onHide={handleCloseEditForm} className='deleteModal'>
+                <Modal.Header closeButton className='deleteModalText'>
+                    <Modal.Title>Edit Question #{question.id}</Modal.Title>
+                </Modal.Header>
+                <Modal.Body className='deleteModalText'>
+                    <Form onSubmit={handleFormSubmit}>
+                      <Form.Control name='answer' value={questionToEdit?.answer} onChange={handleInputChange}/>
+                      <Button variant='success' className='mt-3 w-50' onClick={handleFormSubmit}>
+                        Save Edits
+                    </Button>
+                    <Button variant='info' className='mt-3 w-50' onClick={handleCloseEditForm}>
+                        Cancel
+                    </Button>
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer className='deleteModalText'>
                 </Modal.Footer>
             </Modal>
         }

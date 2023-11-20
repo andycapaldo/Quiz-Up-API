@@ -164,6 +164,22 @@ async function deleteQuestion(token:string, questionId: number): Promise<APIResp
     return {data, error}
 }
 
+async function editQuestion(token:string, questionId: number, editedQuestionData:Partial<QuestionType>|null): Promise<APIResponse<{success:string}>> {
+    let data;
+    let error;
+    try{
+        const response = await apiClientTokenAuth(token).put(questionEndpoint + '/' + questionId, editedQuestionData);
+        data = response.data;
+    } catch(err){
+        if (axios.isAxiosError(err)){
+            error = err.response?.data.error 
+        } else {
+            error = 'Something went wrong'
+        }
+    }
+    return {data, error}
+}
+
 
 export {
     getAllQuestions,
@@ -173,5 +189,6 @@ export {
     deleteProfile,
     createQuestion,
     getMyQuestions,
-    deleteQuestion
+    deleteQuestion,
+    editQuestion
 }
